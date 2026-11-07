@@ -33,7 +33,7 @@ células vazias e `.` passam a nulos nas três colunas de suporte/status.
 | `Panturrilha E` | decimal | 120 | 41 | Valor registrado para panturrilha esquerda; medida e unidade a confirmar. |
 | `Braço D` | decimal | 249 | 18 | Valor registrado para braço direito; medida e unidade a confirmar. |
 | `Braço E` | decimal | 257 | 15 | Valor registrado para braço esquerdo; medida e unidade a confirmar. |
-| `10 metros` | decimal | 46 | 90 | Resultado associado ao teste de 10 metros; unidade/protocolo não informados. |
+| `10 metros` | decimal | 46 | 90 | Tempo para percorrer 10 metros, em segundos, conforme informado pelo responsável pela base. |
 | `Aditamento 10m` | texto | 52 | 26 | Aditamento/auxílio registrado para o teste de 10 metros. |
 | `CIF equilíbrio` | texto | 6 | 11 | Registro relacionado a equilíbrio pela CIF; código/escala precisa confirmação. |
 | `Posição equilíbrio` | texto | 6 | 4 | Posição registrada na avaliação de equilíbrio. |
@@ -43,6 +43,19 @@ células vazias e `.` passam a nulos nas três colunas de suporte/status.
 
 \* Valores distintos não contam ausentes. Diferenças de caixa/espaços ainda
 contam como valores distintos nesta contagem bruta.
+
+## Variável derivada no notebook
+
+O notebook calcula `Velocidade (m/s)` a partir de `10 metros`:
+
+```python
+df['10 metros'] = pd.to_numeric(df['10 metros'], errors='coerce')
+df['Velocidade (m/s)'] = 10 / df['10 metros'].where(df['10 metros'] > 0)
+```
+
+O resultado representa a velocidade média no percurso de 10 metros. Tempos
+ausentes, inválidos ou não positivos ficam sem velocidade calculada. Com os
+dados atuais, há 236 velocidades calculáveis e 46 ausentes.
 
 ## Observações sobre os nomes
 
